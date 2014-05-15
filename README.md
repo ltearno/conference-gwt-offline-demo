@@ -7,7 +7,9 @@ GWT Offline Application Demonstration, with SQL.js, Application Cache and Local 
 
 do a 
 
+```bash
 mvn clean install tomcat7:run
+```
 
 to compile and run the project.
 
