@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module rename-to="offlinedemo">
+  <inherits name="com.google.gwt.user.User" />
+  <inherits name="com.google.gwt.json.JSON" />
+  <!-- <inherits name="com.google.gwt.user.theme.clean.Clean"/> -->
+
+  <source path="client" />
+  <source path="shared" />
+
+  <add-linker name="xsiframe" />
+
+  <entry-point class="com.lteconsulting.offlinedemo.client.App" />
+  
+  <define-linker name="AppCacheLinker" class="com.lteconsulting.offlinedemo.linker.AppCacheLinker" />
+  <add-linker name="AppCacheLinker" />
+</module>
