@@ -6,11 +6,11 @@ import java.util.List;
 
 import com.google.gwt.user.client.rpc.IsSerializable;
 
-public class ClientHistory implements Serializable, IsSerializable
+public class UpstreamSynchroParameter implements Serializable, IsSerializable
 {
 	private static final long serialVersionUID = -8382433245934779446L;
 
-	public ClientHistory()
+	public UpstreamSynchroParameter()
 	{
 	}
 

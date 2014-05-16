@@ -23,3 +23,16 @@ You can then access the [http://localhost:8080/offline-demo/](http://localhost:8
 
 ## What is it more ?
 
+Having SQL on the client side
+sql.js
+mini orm => get results on the left side, no callbacks ! make complex queries
+
+Persisting the data
+what to persist ? sql db
+
+Persisting the application
+
+Synchronizing
+Asking and detecting changes
+Conflict detection and resolution
+

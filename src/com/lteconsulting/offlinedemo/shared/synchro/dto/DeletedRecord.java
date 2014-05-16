@@ -1,14 +1,10 @@
 package com.lteconsulting.offlinedemo.shared.synchro.dto;
 
-import java.io.Serializable;
-
 import com.google.gwt.user.client.rpc.IsSerializable;
 
 
-public class DeletedRecord implements Serializable, IsSerializable
+public class DeletedRecord implements IsSerializable
 {
-	private static final long serialVersionUID = -7474645682184995737L;
-
 	private String table;
 	private int recordId;
 

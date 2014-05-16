@@ -23,7 +23,7 @@ public class Synchronizer
 	private Synchronizer()
 	{
 		// instantiate synchronization manager
-		mng = new SynchroManager( "offlinedemo" );
+		mng = new SynchroManager();
 
 		// synchro configuration
 		mng.setConfig( ApplicationSharedConstants.SYNCHRO_CONFIG );

@@ -1,22 +1,38 @@
 package com.lteconsulting.offlinedemo.shared.synchro;
 
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 
 public class SynchroConfig
 {
-	private List<TableConfig> tableConfigs;
+	private final String name;
+	private HashMap<String,TableConfig> tableConfigs;
 
-	public SynchroConfig()
+	public SynchroConfig( String name )
 	{
+		this.name = name;
 	}
 
 	public void setTableConfigs( List<TableConfig> configs )
 	{
-		this.tableConfigs = configs;
+		tableConfigs= new HashMap<>();
+		for( TableConfig config : configs )
+			tableConfigs.put( config.getName(), config );
 	}
 
-	public List<TableConfig> getTableConfigs()
+	public Collection<TableConfig> getTableConfigs()
 	{
-		return tableConfigs;
+		return tableConfigs.values();
+	}
+
+	public TableConfig getTableConfig( String table )
+	{
+		return tableConfigs.get( table );
+	}
+
+	public String getName()
+	{
+		return name;
 	}
 }

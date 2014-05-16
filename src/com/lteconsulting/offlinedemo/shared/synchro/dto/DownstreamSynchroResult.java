@@ -1,47 +1,24 @@
 package com.lteconsulting.offlinedemo.shared.synchro.dto;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map.Entry;
 
 import com.google.gwt.user.client.rpc.IsSerializable;
 
-public final class SyncResult implements Serializable, IsSerializable
+public class DownstreamSynchroResult implements IsSerializable
 {
-	private static final long serialVersionUID = 5207583888408942691L;
-
-	private List<OldToNewId> idUpdateData;
-
 	// set of updated records, beginning at the cursor position provided by the client
 	private HashMap<String, ArrayList<Record>> updatedRecords;
 	// updated cursors, to be stored by the client
 	private ArrayList<TableSyncCursor> updatedSyncCursors;
-
 	// set of deleted records
 	private ArrayList<DeletedRecord> deletedRecords;
 	// updated deletion cursor
 	private String deletionCursor;
 
-	public SyncResult()
+	public DownstreamSynchroResult()
 	{
-	}
-
-	public List<OldToNewId> getIdUpdates()
-	{
-		return idUpdateData;
-	}
-
-	public void setIdUpdateData( HashMap<String, HashMap<Integer, Integer>> oldToNewIds )
-	{
-		idUpdateData = new ArrayList<>();
-
-		for( Entry<String, HashMap<Integer, Integer>> entry : oldToNewIds.entrySet() )
-		{
-			for( Entry<Integer, Integer> e2 : entry.getValue().entrySet() )
-				idUpdateData.add( new OldToNewId( entry.getKey(), e2.getKey(), e2.getValue() ) );
-		}
 	}
 
 	public HashMap<String, ArrayList<Record>> getModifiedRecords()

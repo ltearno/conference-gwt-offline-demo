@@ -28,6 +28,7 @@ import com.google.gwt.view.client.ProvidesKey;
 import com.lteconsulting.offlinedemo.client.Navigate;
 import com.lteconsulting.offlinedemo.client.dto.Article;
 
+@SuppressWarnings( "unused" )
 public class ArticlesListWidget extends Composite
 {
 	private ListDataProvider<Article> dataProvider;

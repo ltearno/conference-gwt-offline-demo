@@ -4,12 +4,12 @@ import java.util.ArrayList;
 
 import com.google.gwt.user.client.rpc.IsSerializable;
 
-public class SyncCursor implements IsSerializable
+public class DownstreamSynchroParameter implements IsSerializable
 {
 	private ArrayList<TableSyncCursor> tableCursors;
 	private String deleteCursor;
 
-	public SyncCursor()
+	public DownstreamSynchroParameter()
 	{
 	}
 

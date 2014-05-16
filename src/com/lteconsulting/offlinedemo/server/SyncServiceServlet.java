@@ -7,21 +7,21 @@ import com.lteconsulting.offlinedemo.server.Utils.Transaction;
 import com.lteconsulting.offlinedemo.server.synchro.SynchroManager;
 import com.lteconsulting.offlinedemo.shared.ApplicationSharedConstants;
 import com.lteconsulting.offlinedemo.shared.SyncService;
-import com.lteconsulting.offlinedemo.shared.synchro.dto.ClientHistory;
-import com.lteconsulting.offlinedemo.shared.synchro.dto.SyncCursor;
-import com.lteconsulting.offlinedemo.shared.synchro.dto.SyncResult;
+import com.lteconsulting.offlinedemo.shared.synchro.dto.UpstreamSynchroParameter;
+import com.lteconsulting.offlinedemo.shared.synchro.dto.DownstreamSynchroParameter;
+import com.lteconsulting.offlinedemo.shared.synchro.dto.SynchroResult;
 
 public class SyncServiceServlet extends RemoteServiceServlet implements SyncService
 {
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public SyncResult syncData( final ClientHistory localHistory, final SyncCursor cursor )
+	public SynchroResult syncData( final UpstreamSynchroParameter localHistory, final DownstreamSynchroParameter cursor )
 	{
-		return Utils.executeTransaction( new Transaction<SyncResult>()
+		return Utils.executeTransaction( new Transaction<SynchroResult>()
 		{
 			@Override
-			public SyncResult execute( EntityManager em )
+			public SynchroResult execute( EntityManager em )
 			{
 				SynchroManager syncer = new SynchroManager();
 
