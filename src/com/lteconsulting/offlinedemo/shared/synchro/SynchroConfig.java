@@ -4,6 +4,11 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
+/*
+ * Data structure holding the synchronization configuration
+ *  - Tables which are synchronized accross client and server,
+ *  - Foreign constraints in the database are also declared here, because needed by the synchronization implementations
+ */
 public class SynchroConfig
 {
 	private final String name;

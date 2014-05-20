@@ -1,7 +1,10 @@
 package com.lteconsulting.offlinedemo.client.dto;
 
-import com.lteconsulting.offlinedemo.client.Synchronizer;
+import com.lteconsulting.offlinedemo.client.Synchronization;
 
+/*
+ * BaseDTO class for client side. Allows to track changes made in memory, to save them later on.
+ */
 public class BaseDto
 {
 	private String table;
@@ -19,7 +22,7 @@ public class BaseDto
 
 	public final int getId()
 	{
-		return Synchronizer.get().getRealId( table, id );
+		return Synchronization.get().getRealId( table, id );
 	}
 
 	public final void setId( int id )

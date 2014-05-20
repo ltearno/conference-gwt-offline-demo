@@ -1,5 +1,8 @@
 package com.lteconsulting.offlinedemo.client.util;
 
+/*
+ * A class to encode data into Base64
+ */
 public class Base64Coder
 {
 	// Mapping table from 6-bit nibbles to Base64 characters.

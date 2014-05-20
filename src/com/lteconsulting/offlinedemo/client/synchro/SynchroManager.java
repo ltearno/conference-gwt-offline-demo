@@ -12,6 +12,9 @@ import com.lteconsulting.offlinedemo.shared.synchro.dto.UpstreamSynchroParameter
 
 /*
  * Manages tables synchronization on the client side
+ * It combines the two synchronization aspects :
+ *  - Server to Client -> Downstream Synchronization
+ *  - Client to Server -> Upstream Synchronization
  */
 public class SynchroManager
 {
@@ -24,6 +27,9 @@ public class SynchroManager
 	{
 	}
 
+	/*
+	 * Initialize the synchronization configuration
+	 */
 	public void setConfig( SynchroConfig config )
 	{
 		upstreamSynchroManager = new UpstreamSynchroManager( config, sqlDb );
@@ -32,11 +38,15 @@ public class SynchroManager
 
 	/*
 	 * Do a synchronization step of the database with the server.
+	 * The integer returned in the onSuccess method is the number of records that were synchronized
+	 * Note that two synchronizations are happening in the same call :
+	 *  - Upstream = client to server
+	 *  - Downstram = server to client
 	 */
 	public void doSynchro( final AsyncCallback<Integer> callback )
 	{
 		// find records that have been locally updated, created or deleted
-		final UpstreamSynchroParameter upstreamSynchroParameter = upstreamSynchroManager.getClientHistory();
+		UpstreamSynchroParameter upstreamSynchroParameter = upstreamSynchroManager.getClientHistory();
 
 		// compute current synchronization cursors, so that the server can update us with new or deleted records
 		DownstreamSynchroParameter downstreamSynchroParameter = downstreamSynchroManager.getSynchroParameter();
@@ -46,7 +56,7 @@ public class SynchroManager
 			@Override
 			public void onSuccess( SynchroResult result )
 			{
-				int res = processSyncResult( result, upstreamSynchroParameter );
+				int res = processSyncResult( result );
 
 				callback.onSuccess( res );
 			}
@@ -62,33 +72,33 @@ public class SynchroManager
 
 	// process the result of a synchronization call to the server
 	// returns the number of changes that happened during the process
-	private int processSyncResult( SynchroResult result, UpstreamSynchroParameter clientHistory )
+	private int processSyncResult( SynchroResult result )
 	{
 		if( result == null )
 			return 0;
 
 		// update local ids (local one were < 0 and have now been generated on the server side)
-		upstreamSynchroManager.processUpstreamSynchroResult( result.getUpstreamSynchroResult() );
+		int nbUpstreamCommits = upstreamSynchroManager.processSynchroResult( result.getUpstreamSynchroResult() );
 
-		downstreamSynchroManager.processSynchroResult( result.getDownstreamSynchroResult() );
+		int nbDownstreamCommits = downstreamSynchroManager.processSynchroResult( result.getDownstreamSynchroResult() );
+
+		int nbCommits = nbUpstreamCommits + nbDownstreamCommits;
 
 		// save db if needed
-		int nbLocalCommits = clientHistory.getNbChanges();
-		int nbServerChanges = result.getDownstreamSynchroResult().getNbServerChanges();
-		if( nbLocalCommits + nbServerChanges > 0 )
+		if( nbCommits > 0 )
 			DataAccess.get().scheduleSaveDb();
 
 		// produce a report
-		if( nbLocalCommits + nbServerChanges > 0 )
+		if( nbCommits > 0 )
 		{
 			GWT.log( "Sync:" );
-			GWT.log( nbLocalCommits + " local changes" );
-			GWT.log( nbServerChanges + " server changes" );
+			GWT.log( nbUpstreamCommits + " local changes" );
+			GWT.log( nbDownstreamCommits + " server changes" );
 			GWT.log( "updateCursors: " + result.getDownstreamSynchroResult().getUpdatedUpdateCursors() );
 			GWT.log( "deletionCursor: " + result.getDownstreamSynchroResult().getUpdatedDeletionCursor() );
 		}
 
-		return nbLocalCommits + nbServerChanges;
+		return nbCommits;
 	}
 
 	public Integer getRealId( String table, Integer id )

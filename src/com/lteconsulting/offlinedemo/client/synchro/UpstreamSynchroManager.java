@@ -18,6 +18,13 @@ import com.lteconsulting.offlinedemo.shared.synchro.dto.upstream.DeletedRecordSt
 import com.lteconsulting.offlinedemo.shared.synchro.dto.upstream.InsertedRecordStatus;
 import com.lteconsulting.offlinedemo.shared.synchro.dto.upstream.UpdatedRecordStatus;
 
+/*
+ * Manages the Upstream synchronization on the client side.
+ * Upstream synchronization consist to send locally changed, deleted and created records to the server.
+ * Created records have a negative id when locally created. Once they are inserted into the server's database,
+ * a positive auto generated id is generated. This class makes the appropriate local SQL database changes
+ * in order to update the negative ids to their positive server version.
+ */
 public class UpstreamSynchroManager
 {
 	// synchronization configuration object
@@ -64,15 +71,18 @@ public class UpstreamSynchroManager
 
 	/*
 	 * Process the results given by the server after upstream synchronization
+	 * And returns the number of locally modified records
 	 */
-	public void processUpstreamSynchroResult( UpstreamSynchroResult result )
+	public int processSynchroResult( UpstreamSynchroResult result )
 	{
 		if( result == null )
-			return;
+			return 0;
 
-		commitInsertedRecords( result.getInsertedRecords() );
-		commitDeletedRecords( result.getDeletedRecords() );
-		commitUpdatedRecord( result.getUpdatedRecords() );
+		int nbInsertedRecords = commitInsertedRecords( result.getInsertedRecords() );
+		int nbDeletedRecords = commitDeletedRecords( result.getDeletedRecords() );
+		int nbUpdatedRecords = commitUpdatedRecord( result.getUpdatedRecords() );
+
+		return nbInsertedRecords + nbDeletedRecords + nbUpdatedRecords;
 	}
 
 	private void ensureDatabaseReady()
@@ -94,10 +104,12 @@ public class UpstreamSynchroManager
 		}
 	}
 
-	private void commitInsertedRecords( List<InsertedRecordStatus> insertedRecords )
+	private int commitInsertedRecords( List<InsertedRecordStatus> insertedRecords )
 	{
 		if( insertedRecords == null )
-			return;
+			return 0;
+
+		int res = 0;
 
 		for( InsertedRecordStatus otni : insertedRecords )
 		{
@@ -110,13 +122,19 @@ public class UpstreamSynchroManager
 			// TODO : update also referencing fields
 
 			storeIdMapping( table, oldId, newId );
+
+			res++;
 		}
+
+		return res;
 	}
 
-	private void commitDeletedRecords( List<DeletedRecordStatus> deletedRecords )
+	private int commitDeletedRecords( List<DeletedRecordStatus> deletedRecords )
 	{
 		if( deletedRecords == null )
-			return;
+			return 0;
+
+		int res = 0;
 
 		for( DeletedRecordStatus deletedRecordStatus : deletedRecords )
 		{
@@ -127,13 +145,19 @@ public class UpstreamSynchroManager
 			int id = deletedRecordStatus.getId();
 
 			sqlDb.execute( "delete from deleted_records where record_id=" + id + " and table_name like '" + table + "'" );
+
+			res++;
 		}
+
+		return res;
 	}
 
-	private void commitUpdatedRecord( List<UpdatedRecordStatus> updatedRecords )
+	private int commitUpdatedRecord( List<UpdatedRecordStatus> updatedRecords )
 	{
 		if( updatedRecords == null )
-			return;
+			return 0;
+
+		int res = 0;
 
 		for( UpdatedRecordStatus updatedRecord : updatedRecords )
 		{
@@ -143,7 +167,11 @@ public class UpstreamSynchroManager
 			// commit the local update if it has not been modified again during the synchronization
 			// the sqlite trigger will reset locally_modified to 0
 			sqlDb.execute( "update " + updatedRecord.getTable() + " set locally_modified=-1 where id="+updatedRecord.getId()+" AND locally_modified=2" );
+
+			res++;
 		}
+
+		return res;
 	}
 
 	public Integer getRealId( String table, Integer id )

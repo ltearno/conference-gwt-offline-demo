@@ -11,10 +11,15 @@ import javax.persistence.Query;
 import com.lteconsulting.offlinedemo.shared.synchro.FieldConfig;
 import com.lteconsulting.offlinedemo.shared.synchro.SynchroConfig;
 import com.lteconsulting.offlinedemo.shared.synchro.TableConfig;
-import com.lteconsulting.offlinedemo.shared.synchro.dto.DownstreamSynchroResult;
 import com.lteconsulting.offlinedemo.shared.synchro.dto.DownstreamSynchroParameter;
+import com.lteconsulting.offlinedemo.shared.synchro.dto.DownstreamSynchroResult;
 import com.lteconsulting.offlinedemo.shared.synchro.dto.TableSyncCursor;
 
+/*
+ * Handles the Downstream synchronization process on the server side.
+ *  - The client provides a synchronization cursor
+ *  - Implementation finds all updates from then, together with the updated sync cursors that become valid if the client manages to commit all changes
+ */
 public class DownstreamSynchroManager
 {
 	private SynchroConfig config;

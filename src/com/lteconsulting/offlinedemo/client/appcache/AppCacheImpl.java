@@ -2,7 +2,10 @@ package com.lteconsulting.offlinedemo.client.appcache;
 
 import com.google.gwt.core.client.JavaScriptObject;
 
-public final class AppCacheImpl extends JavaScriptObject
+/*
+ * Wrapper to the Application Cache API
+ */
+final class AppCacheImpl extends JavaScriptObject
 {
 	public interface Callback
 	{

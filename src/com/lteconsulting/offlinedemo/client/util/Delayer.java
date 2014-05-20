@@ -3,9 +3,8 @@ package com.lteconsulting.offlinedemo.client.util;
 import com.google.gwt.user.client.Timer;
 
 /*
- * in input, many events,
- * in output, events at a max rate of xxx milliseconds or,
- * if fPostponeEachTime is true => callback called xxx ms after the last event received
+ * A class to delay execution.
+ * you call trigger() and it will call onExecute() xxx milliseconds after (only once for many calls of the trigger() method)
  */
 
 public abstract class Delayer

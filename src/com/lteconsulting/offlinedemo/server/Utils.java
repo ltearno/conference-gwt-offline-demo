@@ -4,6 +4,11 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
+/*
+ * Server utility class.
+ *  - Retrieving an EntityManager
+ *  - Securing a Java call into a DB transaction
+ */
 public class Utils
 {
 	private static final EntityManagerFactory emf = Persistence.createEntityManagerFactory( "offlinedemo" );

@@ -2,7 +2,7 @@ package com.lteconsulting.offlinedemo.client.dto;
 
 import java.util.Date;
 
-import com.lteconsulting.offlinedemo.client.Synchronizer;
+import com.lteconsulting.offlinedemo.client.Synchronization;
 import com.lteconsulting.offlinedemo.client.sql.SQLite;
 
 public class OrderItem extends BaseDto
@@ -41,7 +41,7 @@ public class OrderItem extends BaseDto
 
 	public int getOrderId()
 	{
-		return Synchronizer.get().getRealId( "orders", orderId );
+		return Synchronization.get().getRealId( "orders", orderId );
 	}
 
 	public void setOrderId( int orderId )
@@ -52,7 +52,7 @@ public class OrderItem extends BaseDto
 
 	public Integer getArticleId()
 	{
-		return Synchronizer.get().getRealId( "articles", articleId );
+		return Synchronization.get().getRealId( "articles", articleId );
 	}
 
 	public void setArticleId( Integer articleId )

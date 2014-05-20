@@ -15,6 +15,10 @@ import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONValue;
 import com.lteconsulting.offlinedemo.shared.synchro.dto.Record;
 
+/*
+ * Provides an easy access to rows and columns resulting from a SQL query ran against SQLite
+ * Since the SQLite JSON result format may change, this will provide an independant access to results.
+ */
 public class SQLiteResult implements Iterable<SQLiteResult.Row>
 {
 	HashMap<String,Integer> columnsIdx = new HashMap<>();
@@ -157,26 +161,6 @@ public class SQLiteResult implements Iterable<SQLiteResult.Row>
 			}
 		};
 	}
-
-//	public JsArray<JavaScriptObject> getAsJavascriptArray()
-//	{
-//		JSONArray res = new JSONArray();
-//
-//		for( int r=0; r<size(); r++ )
-//		{
-//			JSONObject rowObject = new JSONObject();
-//
-//			JSONArray row = root.get( String.valueOf( r ) ).isArray();
-//			for( int c=0; c<row.size(); c++ )
-//			{
-//				rowObject.put( row.get( c ).isObject().get( "column" ).isString().stringValue(), row.get( c ).isObject().get( "value" ) );
-//			}
-//
-//			res.set( r, rowObject );
-//		}
-//
-//		return res.getJavaScriptObject().<JsArray<JavaScriptObject>>cast();
-//	}
 
 	public List<Record> getAsMap()
 	{

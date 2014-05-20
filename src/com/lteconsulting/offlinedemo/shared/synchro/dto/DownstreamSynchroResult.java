@@ -36,23 +36,6 @@ public class DownstreamSynchroResult implements IsSerializable
 		return deletionCursor;
 	}
 
-	// get total number of changes from the server (delete, create, update)
-	public int getNbServerChanges()
-	{
-		int res = 0;
-
-		if( updatedRecords != null )
-		{
-			for( ArrayList<Record> records : updatedRecords.values() )
-				res += records.size();
-		}
-
-		if( deletedRecords != null )
-			res += deletedRecords.size();
-
-		return res;
-	}
-
 	public void addUpdatedRecord( String table, List<String> fieldNames, Object[] fields )
 	{
 		if( updatedRecords == null )

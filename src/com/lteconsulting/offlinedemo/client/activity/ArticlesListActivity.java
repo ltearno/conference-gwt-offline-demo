@@ -8,6 +8,9 @@ import com.lteconsulting.offlinedemo.client.MainView;
 import com.lteconsulting.offlinedemo.client.dto.Article;
 import com.lteconsulting.offlinedemo.client.view.ArticlesListWidget;
 
+/*
+ * Allows to see and edit the Articles stored in the application
+ */
 public class ArticlesListActivity implements Activity
 {
 	ArticlesListWidget view;

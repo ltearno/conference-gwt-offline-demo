@@ -5,6 +5,13 @@ import java.util.Arrays;
 import com.lteconsulting.offlinedemo.shared.synchro.SynchroConfig;
 import com.lteconsulting.offlinedemo.shared.synchro.TableConfig;
 
+/*
+ * This class holds the synchronization configuration data structure that will
+ * be used both on the server and client sides.
+ *
+ * This means that if you want to use this synchronization implementation for other
+ * tables, you might just need to change only this class !
+ */
 public class ApplicationSharedConstants
 {
 	public final static SynchroConfig SYNCHRO_CONFIG;

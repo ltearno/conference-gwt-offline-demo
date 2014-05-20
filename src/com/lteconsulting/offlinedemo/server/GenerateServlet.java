@@ -11,6 +11,9 @@ import javax.servlet.http.HttpServletResponse;
 import com.lteconsulting.offlinedemo.server.Utils.Transaction;
 import com.lteconsulting.offlinedemo.server.entities.Article;
 
+/*
+ * A servlet that generates some Articles
+ */
 public class GenerateServlet extends HttpServlet
 {
 	private static final long serialVersionUID = -695489334137082781L;

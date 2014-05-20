@@ -8,6 +8,9 @@ import com.lteconsulting.offlinedemo.client.MainView;
 import com.lteconsulting.offlinedemo.client.dto.Order;
 import com.lteconsulting.offlinedemo.client.view.OrdersListWidget;
 
+/*
+ * Allows to list, remove and add Orders
+ */
 public class OrdersListActivity implements Activity
 {
 	OrdersListWidget view = new OrdersListWidget();

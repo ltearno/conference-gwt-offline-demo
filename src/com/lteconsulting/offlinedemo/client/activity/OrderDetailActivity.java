@@ -12,6 +12,10 @@ import com.lteconsulting.offlinedemo.client.util.SimpleAsyncCallback;
 import com.lteconsulting.offlinedemo.client.view.OrderDetailWidget;
 import com.lteconsulting.offlinedemo.client.view.RecentArticles;
 
+/*
+ * Allows to see and edit an Order
+ * It also allows to add, edit and remove the order's items list
+ */
 public class OrderDetailActivity implements Activity
 {
 	private int orderId;

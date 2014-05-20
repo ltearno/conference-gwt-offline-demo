@@ -11,6 +11,7 @@ import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONParser;
 import com.google.gwt.json.client.JSONString;
 import com.google.gwt.json.client.JSONValue;
+import com.lteconsulting.offlinedemo.client.ApplicationPersistedSetting;
 import com.lteconsulting.offlinedemo.client.DataAccess;
 import com.lteconsulting.offlinedemo.client.sql.SQLite;
 import com.lteconsulting.offlinedemo.client.sql.SQLiteResult;
@@ -23,52 +24,22 @@ import com.lteconsulting.offlinedemo.shared.synchro.dto.DownstreamSynchroResult;
 import com.lteconsulting.offlinedemo.shared.synchro.dto.Record;
 import com.lteconsulting.offlinedemo.shared.synchro.dto.TableSyncCursor;
 
+/*
+ * Manages downstream synchronization on the client side
+ * Downstream synchronization consist of synchronizing the client database with recent server changes.
+ * It requires to save a synchronization cursor on the client side, for each synchronized table.
+ */
 public class DownstreamSynchroManager
 {
-	// application parameters that we save in the database
-	private static final String PARAMS_KEY_DELETECURSOR = "del_cursor";
-	private static final String PARAMS_KEY_SYNCCURSOR = "sync_cursor";
-
 	// synchronization configuration object
 	private SynchroConfig config;
 
 	private SQLite sqlDb;
 
-	private String getParameterString( String key )
-	{
-		SQLiteResult res = new SQLiteResult( sqlDb.execute( "select value_text from params where key='"+key+"'" ) );
-		if( res.size() == 0 )
-			return null;
-
-		return res.getRow( 0 ).getString( "value_text" );
-	}
-
-	private void setParameter( String key, String value )
-	{
-		SQLiteResult res = new SQLiteResult( sqlDb.execute( "select key, value_text from params where key='" + key + "'" ) );
-		if( res.size() == 0 )
-		{
-			// insert
-			sqlDb.execute( "insert into params ( key, value_text ) values ( '"+key+"', '"+value+"')"  );
-			DataAccess.get().scheduleSaveDb();
-		}
-		else
-		{
-			if( ! value.equals( res.getRow( 0 ).getString( "value_text" ) ) )
-			{
-				// update
-				sqlDb.execute( "update params set value_text='"+value+"' where key='"+key+"'"  );
-				DataAccess.get().scheduleSaveDb();
-			}
-		}
-	}
-
 	public DownstreamSynchroManager( SynchroConfig config, SQLite sqlDb )
 	{
 		this.config = config;
 		this.sqlDb = sqlDb;
-
-		ensureDatabaseReady();
 	}
 
 	public DownstreamSynchroParameter getSynchroParameter()
@@ -76,7 +47,7 @@ public class DownstreamSynchroManager
 		DownstreamSynchroParameter cursor = new DownstreamSynchroParameter();
 
 		ArrayList<TableSyncCursor> tableCursors = loadLocalSyncCursors();
-		String deleteCursor = getParameterString( PARAMS_KEY_DELETECURSOR );
+		String deleteCursor = DataAccess.get().getAppSettingString( ApplicationPersistedSetting.DOWNSTREAMSYNC_DELETECURSOR );
 
 		cursor.setTableCursors( tableCursors );
 		cursor.setDeleteCursor( deleteCursor );
@@ -84,28 +55,24 @@ public class DownstreamSynchroManager
 		return cursor;
 	}
 
-	public void processSynchroResult( DownstreamSynchroResult result )
+	public int processSynchroResult( DownstreamSynchroResult result )
 	{
 		if( result == null )
-			return;
+			return 0;
 
 		// process updated records from the server
-		processUpdatedRecords( result.getModifiedRecords() );
+		int nbUpdatedRecords = processUpdatedRecords( result.getModifiedRecords() );
 
 		// store synchronization update cursors
 		storeSyncUpdateCursors( result.getUpdatedUpdateCursors() );
 
 		// process records deleted on the server side
-		processDeletedRecords( result.getDeletedRecords() );
+		int nbDeletedRecords = processDeletedRecords( result.getDeletedRecords() );
 
 		// store synchronization delete cursor
-		setParameter( PARAMS_KEY_DELETECURSOR, result.getUpdatedDeletionCursor() );
-	}
+		DataAccess.get().setAppSetting( ApplicationPersistedSetting.DOWNSTREAMSYNC_DELETECURSOR, result.getUpdatedDeletionCursor() );
 
-	private void ensureDatabaseReady()
-	{
-		// create the deleted records table if needed, to keep track of locally deleted records
-		sqlDb.execute( "create table if not exists params (key TEXT, value_text TEXT, value_int INTEGER);" );
+		return nbUpdatedRecords + nbDeletedRecords;
 	}
 
 	private ArrayList<TableSyncCursor> loadLocalSyncCursors()
@@ -113,7 +80,7 @@ public class DownstreamSynchroManager
 		try
 		{
 			ArrayList<TableSyncCursor> res = new ArrayList<>();
-			String serialized = getParameterString( PARAMS_KEY_SYNCCURSOR );
+			String serialized = DataAccess.get().getAppSettingString( ApplicationPersistedSetting.DOWNSTREAMSYNC_SYNCCURSOR );
 			JSONArray array = JSONParser.parseStrict( serialized ).isArray();
 			for( int i = 0; i < array.size(); i++ )
 				res.add( deserializeSyncCursor( array.get( i ) ) );
@@ -147,10 +114,12 @@ public class DownstreamSynchroManager
 		return cursor;
 	}
 
-	private void processDeletedRecords( List<DeletedRecord> deletedRecords )
+	private int processDeletedRecords( List<DeletedRecord> deletedRecords )
 	{
 		if( deletedRecords == null )
-			return;
+			return 0;
+
+		int nb = 0;
 
 		for( int i = 0; i < deletedRecords.size(); i++ )
 		{
@@ -160,7 +129,11 @@ public class DownstreamSynchroManager
 			int id = info.getRecordId();
 
 			sqlDb.execute( "delete from " + table + " where id=" + id );
+
+			nb++;
 		}
+
+		return nb;
 	}
 
 	private String getSqlInsertStatement( Record info, TableConfig tableConfig )
@@ -247,13 +220,15 @@ public class DownstreamSynchroManager
 		for( TableSyncCursor cursor : cursors )
 			array.set( i++, serializeSyncCursor( cursor ) );
 
-		setParameter( PARAMS_KEY_SYNCCURSOR, array.toString() );
+		DataAccess.get().setAppSetting( ApplicationPersistedSetting.DOWNSTREAMSYNC_SYNCCURSOR, array.toString() );
 	}
 
-	private void processUpdatedRecords( HashMap<String, ArrayList<Record>> allModifiedRecords )
+	private int processUpdatedRecords( HashMap<String, ArrayList<Record>> allModifiedRecords )
 	{
 		if( allModifiedRecords == null )
-			return;
+			return 0;
+
+		int nb = 0;
 
 		for( Entry<String, ArrayList<Record>> entry : allModifiedRecords.entrySet() )
 		{
@@ -279,7 +254,11 @@ public class DownstreamSynchroManager
 
 					sqlDb.execute( getSqlUpdateStatement( record, tableConfig ) );
 				}
+
+				nb++;
 			}
 		}
+
+		return nb;
 	}
 }

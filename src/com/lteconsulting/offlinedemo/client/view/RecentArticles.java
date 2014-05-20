@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.FlowPanel;
@@ -11,11 +12,14 @@ import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.lteconsulting.offlinedemo.client.DataAccess;
 import com.lteconsulting.offlinedemo.client.dto.Article;
-import com.lteconsulting.offlinedemo.client.util.SimpleAsyncCallback;
 
+/*
+ * A widget that displays most ordered articles.
+ * When the user clicks on an article's picture, it calls the onSuccess method of the callback
+ */
 public class RecentArticles extends Composite
 {
-	public RecentArticles( final SimpleAsyncCallback<Article> callback )
+	public RecentArticles( final AsyncCallback<Article> callback )
 	{
 		FlowPanel flow = new FlowPanel();
 		flow.add( new Label( "Most ordered articles" ) );

@@ -5,7 +5,9 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.event.shared.SimpleEventBus;
 
-
+/*
+ * Front class allowing to control the Application Cache
+ */
 public class AppCache
 {
 	private static AppCache _INSTANCE;

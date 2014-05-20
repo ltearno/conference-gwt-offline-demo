@@ -9,6 +9,10 @@ import com.lteconsulting.offlinedemo.shared.synchro.dto.SynchroResult;
 import com.lteconsulting.offlinedemo.shared.synchro.dto.UpstreamSynchroParameter;
 import com.lteconsulting.offlinedemo.shared.synchro.dto.UpstreamSynchroResult;
 
+/*
+ * Handles the two aspects of the synchronization (upstream and downstream)
+ * This is a Facade to UpstreamSynchroManager and DownstreamSynchroManager
+ */
 public class SynchroManager
 {
 	private UpstreamSynchroManager upstreamSynchroManager;

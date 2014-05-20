@@ -6,6 +6,9 @@ import com.lteconsulting.offlinedemo.client.MainView;
 import com.lteconsulting.offlinedemo.client.dto.Article;
 import com.lteconsulting.offlinedemo.client.view.ArticleDetailWidget;
 
+/*
+ * Allows to see and edit an article's details
+ */
 public class ArticleDetailActivity implements Activity
 {
 	private Article article;

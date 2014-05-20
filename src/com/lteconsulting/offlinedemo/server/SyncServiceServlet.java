@@ -7,10 +7,13 @@ import com.lteconsulting.offlinedemo.server.Utils.Transaction;
 import com.lteconsulting.offlinedemo.server.synchro.SynchroManager;
 import com.lteconsulting.offlinedemo.shared.ApplicationSharedConstants;
 import com.lteconsulting.offlinedemo.shared.SyncService;
-import com.lteconsulting.offlinedemo.shared.synchro.dto.UpstreamSynchroParameter;
 import com.lteconsulting.offlinedemo.shared.synchro.dto.DownstreamSynchroParameter;
 import com.lteconsulting.offlinedemo.shared.synchro.dto.SynchroResult;
+import com.lteconsulting.offlinedemo.shared.synchro.dto.UpstreamSynchroParameter;
 
+/*
+ * Servlet responding to GWT RPC calls concerning synchronization
+ */
 public class SyncServiceServlet extends RemoteServiceServlet implements SyncService
 {
 	private static final long serialVersionUID = 1L;

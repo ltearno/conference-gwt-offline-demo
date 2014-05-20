@@ -19,6 +19,11 @@ import com.lteconsulting.offlinedemo.shared.synchro.dto.Record;
 import com.lteconsulting.offlinedemo.shared.synchro.dto.UpstreamSynchroParameter;
 import com.lteconsulting.offlinedemo.shared.synchro.dto.UpstreamSynchroResult;
 
+/*
+ * Handles Upstream synchronization process on the server side.
+ * The clients sends us its local changes and created records.
+ * Implementation returns the corresponding inserted ids.
+ */
 public class UpstreamSynchroManager
 {
 	private SynchroConfig config;

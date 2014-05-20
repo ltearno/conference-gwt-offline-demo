@@ -7,11 +7,6 @@ public interface CellTableResources extends CellTable.Resources
 {
 	public static CellTable.Resources INSTANCE = GWT.create( CellTableResources.class );
 
-	//CellTable.Style.DEFAULT_CSS,
-
-//	@Source( { "TableStyle.css" } )
-//	TableStyle cellTableStyle();
-
 	@Override
 	@Source("TableStyle.css")
 	CellTable.Style cellTableStyle();
