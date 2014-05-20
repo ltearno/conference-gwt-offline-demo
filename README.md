@@ -11,7 +11,7 @@ The client side code uses HTML5 features like Application Cache and Local Storag
 
 ## Usage
 
-First, you need to have a MySQL or MariaDB server running on your local host. Default credentials used are user root with no password. Of course those are defined in the persistence.xml file.
+First, you need to have a MySQL or MariaDB server running on your local host. Default credentials used are user root with no password. Of course those are defined in the [persistence.xml](src/META-INF/persistence.xml) file.
 
 Then, do a 
 
