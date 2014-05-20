@@ -27,6 +27,8 @@ Please note that due to the use of a newly hacked version of SQL.js (allowing to
 
 ## What is it more ?
 
+(Sorry, that's a post-it for me to later details the following aspects of the application)
+
 Having SQL on the client side
 sql.js
 mini orm => get results on the left side, no callbacks ! make complex queries
