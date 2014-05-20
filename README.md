@@ -23,6 +23,8 @@ to compile and run the project.
 
 You can then access the [http://localhost:8080/offline-demo/](http://localhost:8080/offline-demo/) url to load the application in your browser.
 
+Please note that due to the use of a newly hacked version of SQL.js (allowing to improve performances on Firefox and Chrome), this application is not compatible with IE yet. Bringing back IE can be done easily by reverting to the old SQL.js version or waiting the bug to be fixed in the new version of SQL.js.
+
 ## What is it more ?
 
 Having SQL on the client side
