@@ -63,7 +63,6 @@ public class UploadServlet extends HttpServlet
 			String field = null;
 
 			String applicationPath = req.getServletContext().getRealPath( "/" );
-			System.out.println(applicationPath);
 
 			List<FileItem> items = upload.parseRequest( req );
 			Iterator<FileItem> iter = items.iterator();
@@ -86,6 +85,10 @@ public class UploadServlet extends HttpServlet
 					String fieldName = item.getFieldName();
 					if( "file".equals( fieldName ) )
 					{
+						File directory = new File( applicationPath + File.separator + field );
+						if( ! directory.exists() )
+							directory.mkdir();
+
 						fileName = UUID.randomUUID().toString() + item.getName().substring( item.getName().lastIndexOf( "." ) );
 						File uploadedFile = new File( applicationPath + File.separator + field + File.separator + fileName );
 						item.write( uploadedFile );
