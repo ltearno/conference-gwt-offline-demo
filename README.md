@@ -3,7 +3,7 @@ OfflineDemo
 
 [![Join the chat at https://gitter.im/ltearno/OfflineDemo](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/ltearno/OfflineDemo?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-![Travis CI status for master branch](https://travis-ci.org/ltearno/OfflineDemo.svg?branch=master)
+[![Build Status for branch master](https://travis-ci.org/ltearno/OfflineDemo.svg?branch=master)](https://travis-ci.org/ltearno/OfflineDemo)
 
 GWT Offline Application Demonstration, with SQL.js, Application Cache and Local Storage
 
